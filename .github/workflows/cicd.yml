@@ -1,4 +1,5 @@
 name: Java CI/CD with Gradle
+
 on:
   push:
     branches:
@@ -6,8 +7,9 @@ on:
   pull_request:
     branches:
       - main
+
 env:
-  JAR_FILE: sboard-0.0.1-SNAPSHOT.jar
+  JAR_FILE: sboard-0.0.1-SNAPSHOT.jar  # 프로젝트에 맞게 파일 이름 수정
 
 jobs:
   build:
@@ -20,14 +22,14 @@ jobs:
           java-version: "17"
           distribution: temurin
       - name: Grant execute permission for gradlew
-        run: chmod +x sboard/gradlew
+        run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: sboard/gradlew build
+        run: ./gradlew build
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: sboard/build/libs/${{ env.JAR_FILE }}
+          path: build/libs/${{ env.JAR_FILE }}
 
   deploy:
     needs: build
@@ -37,7 +39,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app
-          path: sboard/build/libs/
+          path: build/libs/
       - name: Setup SSH Key
         run: |
           echo "${{ secrets.AWS_EC2_KEY }}" > private_key.pem
@@ -46,7 +48,7 @@ jobs:
         run: |
           scp -i private_key.pem \
             -o StrictHostKeyChecking=no \
-            sboard/build/libs/${{ env.JAR_FILE }} \
+            build/libs/${{ env.JAR_FILE }} \
             ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }}:/home/${{ secrets.AWS_EC2_USER }}/
       - name: Restart Spring Application on EC2
         run: |
