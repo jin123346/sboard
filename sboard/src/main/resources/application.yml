@@ -22,11 +22,11 @@ server:
 spring:
     application:
         name: sboard
-        version: 0.0.4
+        version: 0.0.5
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Q1w2e3`!
-        url: jdbc:mysql://127.0.0.1:3306/jboard
+        url: jdbc:mysql://43.202.1.97:3306/jboard
         username: jboard
     devtools:
         livereload:
