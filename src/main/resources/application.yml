@@ -45,7 +45,7 @@ spring:
         host: smtp.gmail.com
         port: 587
         username: hajhi7899@gmail.com # 앱 비밀번호를 발급받은 구글 계정
-        password: lhgi zlju clyp wjtb # 발급받은 앱 비밀번호
+        password: lhgizljuclypwjtb # 발급받은 앱 비밀번호
         properties:
             mail:
                 smtp:
