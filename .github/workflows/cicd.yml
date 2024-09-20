@@ -17,7 +17,7 @@ jobs:
           distribution: temurin
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x sboard/gradlew
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2.6.0
