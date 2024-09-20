@@ -43,7 +43,7 @@ spring:
                 show_sql: true
     mail:
         host: smtp.gmail.com
-        port: 587
+        port: 465
         username: hajhi7899@gmail.com # 앱 비밀번호를 발급받은 구글 계정
         password: lhgizljuclypwjtb # 발급받은 앱 비밀번호
         properties:
