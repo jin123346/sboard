@@ -53,7 +53,7 @@ window.onload = function(){
             .then(data => {
                 console.log(data);
 
-                if(data.result > 0){
+                if(data > 0){
                     resultId.innerText = '이미 사용중인 아이디 입니다.';
                     resultId.style.color = 'red';
                     isUidOk = false;
@@ -121,7 +121,7 @@ window.onload = function(){
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                if(data.result > 0){
+                if(data > 0){
                     resultNick.innerText = '이미 사용중인 별명입니다.';
                     resultNick.style.color = 'red';
                     isNickOk = false;
@@ -163,7 +163,7 @@ window.onload = function(){
             const data = await response.json();
             console.log(data);
 
-            if(data.result > 0){
+            if(data > 0){
                 resultEmail.innerText = '이미 사용중인 이메일 입니다.';
                 resultEmail.style.color = 'red';
                 isEmailOk = false;

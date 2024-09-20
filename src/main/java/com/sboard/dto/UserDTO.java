@@ -42,7 +42,8 @@ public class UserDTO {
                 .addr1(addr1)
                 .addr2(addr2)
                 .regip(regip)
-                .leaveDate(LocalDateTime.parse(leaveDate))
+                .regDate(regDate != null ? LocalDateTime.parse(regDate) : null) // regDate가 null일 경우 처리
+                .leaveDate(leaveDate != null ? LocalDateTime.parse(leaveDate) : null) // leaveDate가 null일 경우 처리
                 .build();
     }
 }

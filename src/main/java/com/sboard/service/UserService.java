@@ -7,6 +7,7 @@ import com.sboard.entity.User;
 import com.sboard.repository.Termsrepository;
 import com.sboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -57,6 +59,7 @@ public class UserService {
       return saveUser.toDTO();
     }
     public UserDTO selectUserByType(String type,String value){
+        log.info("value : "+value);
         if(type.equals("uid")){
             Optional<User> user = userRepository.findById(value);
             if(user.isPresent()){
@@ -64,7 +67,7 @@ public class UserService {
                 return userdto;
             }
         }else if(type.equals("nick")){
-            Optional<User> user = userRepository.findByNick("value");
+            Optional<User> user = userRepository.findByNick(value);
             if(user.isPresent()){
                 UserDTO userdto = user.get().toDTO();
                 return userdto;

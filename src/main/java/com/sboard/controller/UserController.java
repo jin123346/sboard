@@ -57,12 +57,11 @@ public class UserController {
     @PostMapping("/user/register")
     public String register(UserDTO userDTO){
         log.info(userDTO.toString());
-        if(userDTO !=null){
-            userService.insertUser(userDTO);
-
-        }else{
-            return "redirect:/user/register?success=202";
+        if(userDTO == null){
+            return "/user/register?success=202";
         }
+
+        UserDTO savedUser= userService.insertUser(userDTO);
 
         return "redirect:/user/login?success=200";
     }
