@@ -49,9 +49,11 @@ spring:
         properties:
             mail:
                 smtp:
+                    auth: true
                     starttls:
                         enable: true
-                    auth: true
+                    ssl:
+                        enable=true:
     thymeleaf:
         prefix: classpath:/templates
         suffix: .html
