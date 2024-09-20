@@ -1,3 +1,5 @@
+app:
+    version: 0.0.1
 logging:
     file:
         name: /logs/sbord.log
@@ -20,11 +22,12 @@ server:
 spring:
     application:
         name: sboard
+        version: 0.0.4
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        password: 1234
-        url: jdbc:mysql://localhost:3306/jboard
-        username: root
+        password: Q1w2e3`!
+        url: jdbc:mysql://127.0.0.1:3306/jboard
+        username: jboard
     devtools:
         livereload:
             enabled: true
@@ -41,11 +44,14 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: ${hajhi7899@gmail.com} # 앱 비밀번호를 발급받은 구글 계정
-        password: ${lhgizljuclypwjtb} # 발급받은 앱 비밀번호
+        username: hajhi7899@gmail.com # 앱 비밀번호를 발급받은 구글 계정
+        password: lhgi zlju clyp wjtb # 발급받은 앱 비밀번호
         properties:
             mail:
                 smtp:
                     starttls:
                         enable: true
                     auth: true
+    thymeleaf:
+        prefix: classpath:/templates
+        suffix: .html

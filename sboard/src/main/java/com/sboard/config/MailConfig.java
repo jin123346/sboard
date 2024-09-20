@@ -1,33 +1,38 @@
 package com.sboard.config;
 
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.Properties;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.mail")
 public class MailConfig {
 
 
-    private String host;
-    private int port;
-    private String username;
-    private String password;
+    @Value("${spring.mail.host}")
+    private String mailServerHost;
+    @Value("${spring.mail.port}")
+    private String mailServerPort;
+    @Value("${spring.mail.username}")
+    private String mailServerUsername;
+    @Value("${spring.mail.password}")
+    private String mailServerPassword;
 
 
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(this.host);
-        mailSender.setPort(this.port);
+        mailSender.setHost(mailServerHost);
+        mailSender.setPassword(mailServerPort);
 
-        mailSender.setUsername(this.username);
-        mailSender.setPassword(this.password);
+        mailSender.setUsername(mailServerUsername);
+        mailSender.setPassword(mailServerPassword);
 
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.transport.protocol", "smtp");
@@ -36,4 +41,7 @@ public class MailConfig {
 
         return mailSender;
     }
+
+
+
 }

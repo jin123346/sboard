@@ -42,7 +42,6 @@ public class UserDTO {
                 .addr1(addr1)
                 .addr2(addr2)
                 .regip(regip)
-                .regDate(LocalDateTime.parse(regDate))
                 .leaveDate(LocalDateTime.parse(leaveDate))
                 .build();
     }

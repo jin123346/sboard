@@ -71,7 +71,7 @@ window.onload = function(){
     // 2.비밀번호 유효성 검사
     registerForm.pass2.addEventListener('focusout', function(){
 
-        const pass1 = registerForm.pass1.value;
+        const pass1 = registerForm.pass.value;
         const pass2 = registerForm.pass2.value;
 
         if(!pass1.match(rePass)){
@@ -191,12 +191,12 @@ window.onload = function(){
             .then(data => {
                 console.log(data);
 
-                if(data.result > 0){
+                if(data > 0){
                     resultEmail.innerText = '이메일이 인증되었습니다.';
                     resultEmail.style.color = 'green';
                     isEmailOk = true;
                 }else{
-                    resultEmail.innerText = '유효한 인증코드가 않습니다.';
+                    resultEmail.innerText = '유효한 인증코드가 아닙니다.';
                     resultEmail.style.color = 'red';
                     isEmailOk = false;
                 }

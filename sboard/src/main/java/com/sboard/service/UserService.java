@@ -7,24 +7,51 @@ import com.sboard.entity.User;
 import com.sboard.repository.Termsrepository;
 import com.sboard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.channels.NonWritableChannelException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Termsrepository termsRepository;
 
 
+
+
+    public String loginUser(String uid, String password) {
+       String endcodedpassword = passwordEncoder.encode(password);
+
+       Optional<User> opt= userRepository.findByUidAndPass(uid,endcodedpassword);
+
+       if(opt.isPresent()) {
+           User user = opt.get();
+           return user.getUid();
+       }
+
+       return null;
+
+    }
+
     public UserDTO insertUser(UserDTO userDTO) {
+      String encodepass =  passwordEncoder.encode(userDTO.getPass());
+      userDTO.setPass(encodepass);
+
       User user =  userDTO.toEntity();
+
       User saveUser = userRepository.save(user);
 
       return saveUser.toDTO();

@@ -1,82 +1,81 @@
 package com.sboard.service;
 
-import com.sboard.dto.VerificationCodeDTO;
+import com.sboard.dto.EmailMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Random;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private final Map<String, VerificationCode> codeStore = new ConcurrentHashMap<>();
-    private final JavaMailSender mailSender;
 
-
-
-    @Value("${spring.mail.username")
+    @Value("${spring.mail.username}")
     private String serviceEmail;
-    private final Integer EXPIRATION_TIME_IN_MINUTES = 5;
 
-    public void sendVerificationCode(VerificationCodeDTO requestDTO) {
-        String code= UUID.randomUUID().toString();
-        VerificationCode verificationCode = new VerificationCode(code,requestDTO.getEmail(), LocalDateTime.now().plusMinutes(5) );
+    private final JavaMailSender javaMailSender;
+    private final SpringTemplateEngine templateEngine;
 
-        codeStore.put(code,verificationCode);
+    // 인증번호 및 임시 비밀번호 생성 메서드
+    public String createCode() {
+        Random random = new Random();
+        StringBuffer key = new StringBuffer();
 
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(4);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(requestDTO.getEmail());
-        message.setSubject("Your Verification Code");
-        message.setText("Your verification code is: " + code);
-        mailSender.send(message);
-
+            switch (index) {
+                case 0: key.append((char) ((int) random.nextInt(26) + 97)); break;
+                case 1: key.append((char) ((int) random.nextInt(26) + 65)); break;
+                default: key.append(random.nextInt(9));
+            }
+        }
+        return key.toString();
     }
 
-    public boolean verifyCode(String code) {
-        VerificationCode verificationCode = codeStore.get(code);
-        if (verificationCode != null && verificationCode.getExpiration().isAfter(LocalDateTime.now())) {
-            codeStore.remove(code);  // Remove after successful verification
-            return true;
+    // thymeleaf를 통한 html 적용
+    public String setContext(String code, String type) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        return templateEngine.process(type, context);
+    }
+
+    public String sendMail(String email, String type) {
+        String authNum = createCode();
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(email)
+                .subject("[sboard] 이메일 인증을 위한 인증 코드 발송")
+                .build();
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
+            mimeMessageHelper.setSubject(emailMessage.getSubject()); // 메일 제목
+            mimeMessageHelper.setText(setContext(authNum, type), true); // 메일 본문 내용, HTML 여부
+            javaMailSender.send(mimeMessage);
+
+            log.info("suc");
+            return authNum;
+
+        } catch (MessagingException e) {
+            log.info("fail");
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
 
-
-
-
-    private static class VerificationCode {
-        private final String code;
-        private final String email;
-        private final LocalDateTime expiration;
-
-        public VerificationCode(String code, String email, LocalDateTime expiration) {
-            this.code = code;
-            this.email = email;
-            this.expiration = expiration;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public LocalDateTime getExpiration() {
-            return expiration;
-        }
-
-
-    }
 
 
 
