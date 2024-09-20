@@ -43,17 +43,16 @@ spring:
                 show_sql: true
     mail:
         host: smtp.gmail.com
-        port: 465
-        username: hajhi7899@gmail.com # 앱 비밀번호를 발급받은 구글 계정
-        password: lhgizljuclypwjtb # 발급받은 앱 비밀번호
+        port: 587
+        username: loveu9911111
+        password: tolkhjolmorzszso
         properties:
             mail:
                 smtp:
                     auth: true
+                    timeout: 5000
                     starttls:
                         enable: true
-                    ssl:
-                        enable=true:
     thymeleaf:
         prefix: classpath:/templates
         suffix: .html
