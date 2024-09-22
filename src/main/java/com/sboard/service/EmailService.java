@@ -59,8 +59,10 @@ public class EmailService {
                 .subject("[sboard] 이메일 인증을 위한 인증 코드 발송")
                 .build();
 
+        log.info("send email : "+email);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
+        log.info(mimeMessage);
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(emailMessage.getTo()); // 메일 수신자
