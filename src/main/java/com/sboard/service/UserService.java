@@ -58,30 +58,21 @@ public class UserService {
 
       return saveUser.toDTO();
     }
-    public UserDTO selectUserByType(String type,String value){
+    public int selectCountUserByType(String type,String value){
         log.info("value : "+value);
+        int count=0;
         if(type.equals("uid")){
-            Optional<User> user = userRepository.findById(value);
-            if(user.isPresent()){
-                UserDTO userdto = user.get().toDTO();
-                return userdto;
-            }
+            count = userRepository.countByUid(value);
+
         }else if(type.equals("nick")){
-            Optional<User> user = userRepository.findByNick(value);
-            if(user.isPresent()){
-                UserDTO userdto = user.get().toDTO();
-                return userdto;
-            }
+            count = userRepository.countByNick(value);
+
         }else if(type.equals("email")){
-            Optional<User> user = userRepository.findByEmail(value);
-            if(user.isPresent()){
-                UserDTO userdto = user.get().toDTO();
-                return userdto;
-            }
+            count= userRepository.countByEmail(value);
 
         }
 
-        return null;
+        return count;
 
     }
 
@@ -93,9 +84,11 @@ public class UserService {
 
 //terms
     public TermsDTO selectTemrs(){
-        List<Terms> list= termsRepository.findAll();
-        TermsDTO termsDTO= list.get(0).toDTO();
-        return termsDTO;
+
+        List<Terms> termsList = termsRepository.findAll();
+        return termsList.get(0).toDTO();
+
+
     }
 
 }

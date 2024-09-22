@@ -1,9 +1,7 @@
 package com.sboard.entity;
 
 import com.sboard.dto.TermsDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -17,6 +15,8 @@ import lombok.*;
 public class Terms {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String terms;
     private String privacy;
 

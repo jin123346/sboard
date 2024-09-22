@@ -3,6 +3,7 @@ package com.sboard.service;
 import com.sboard.dto.EmailMessage;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,9 +50,10 @@ public class EmailService {
         return templateEngine.process(type, context);
     }
 
-    public String sendMail(String email, String type) {
+    public String sendMail(String email, String type, HttpSession session) {
         String authNum = createCode();
-
+        session.setAttribute("code", authNum);
+        log.info("create code : "+authNum);
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(email)
                 .subject("[sboard] 이메일 인증을 위한 인증 코드 발송")

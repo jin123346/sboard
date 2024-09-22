@@ -5,104 +5,100 @@
     <title>회원가입</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script type="text/javascript" th:src="@{/js/postcode.js}"></script>
+
+    <script type="text/javascript" th:src="@{/js/utils.js}"></script>
     <script type="text/javascript" th:src="@{/js/validation.js}"></script>
 </head>
 <body>
-    <div id="wrapper">
-        <header>
-            <h3>Board System</h3>
-        </header>
-        <main id="user">
-            <section class="register">
+<div id="wrapper">
+    <header>
+        <h3>Board System</h3>
+    </header>
+    <main id="user">
+        <section class="register">
 
-                <form th:action="@{/user/register}" method="post">
-                    <h2 class="tit">사이트 이용정보 입력</h2>
-                    <table border="1">                        
-                        <tr>
-                            <td>아이디</td>
-                            <td>
-                                <input type="text" name="uid" placeholder="아이디 입력"/>
-                                <button type="button" id="btnCheckUid"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
-                                <span class="resultId"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>비밀번호</td>
-                            <td><input type="password" name="pass" placeholder="비밀번호 입력"/></td>
-                        </tr>
-                        <tr>
-                            <td>비밀번호 확인</td>
-                            <td>
-                                <input type="password" name="pass2" placeholder="비밀번호 입력 확인"/>
-                                <span class="resultPass"></span>
-                            </td>
+            <form th:action="@{/user/register}" name="registerForm" method="post">
+                <h2 class="tit">사이트 이용정보 입력</h2>
+                <table border="1">
+                    <tr>
+                        <td>아이디</td>
+                        <td>
+                            <input type="text" name="uid" class="inputUid" placeholder="아이디 입력"/>
+                            <button type="button" id="btnCheckUid" data-type="uid"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
+                            <span id="resultUid"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>비밀번호</td>
+                        <td><input type="password" name="pass" class="inputPass" placeholder="비밀번호 입력"/></td>
+                    </tr>
+                    <tr>
+                        <td>비밀번호 확인</td>
+                        <td>
+                            <input type="password" name="pass2" class="inputPass" placeholder="비밀번호 입력 확인"/>
+                            <span id="resultPass"></span>
+                        </td>
+                    </tr>
+                </table>
 
-                        </tr>
-                    </table>
+                <h2 class="tit">개인정보 입력</h2>
+                <table border="1">
+                    <tr>
+                        <td>이름</td>
+                        <td>
+                            <input type="text" name="name" class="inputName" placeholder="이름 입력"/>
+                            <span id="resultName"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>별명</td>
+                        <td>
+                            <p class="nickInfo">공백없는 한글, 영문, 숫자 입력</p>
+                            <input type="text" name="nick" class="inputNick" placeholder="별명 입력"/>
+                            <button type="button" id="btnCheckNick" data-type="nick"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
+                            <span id="resultNick"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>이메일</td>
+                        <td>
+                            <input type="email" name="email" class="inputEmail" placeholder="이메일 입력"/>
+                            <button type="button" id="btnCheckEmail" data-type="email"><img th:src="@{/img/chk_auth.gif}" alt="인증번호 받기"/></button>
+                            <span id="resultEmail"></span>
+                            <div class="auth">
+                                <input type="text" name="auth" class="inputEmailCode" placeholder="인증번호 입력"/>
+                                <button type="button" id="btnCheckEmailCode"><img th:src="@{/img/chk_confirm.gif}" alt="확인"/></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>휴대폰</td>
+                        <td>
+                            <input type="text" name="hp" class="inputHp" placeholder="휴대폰 입력"/>
+                            <button type="button" id="btnCheckHp" data-type="hp"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
+                            <span id="resultHp"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>주소</td>
+                        <td>
+                            <input type="text" name="zip" id="inputZip" placeholder="우편번호"/>
+                            <button type="button" id="btnZip"><img th:src="@{/img/chk_post.gif}" alt="우편번호찾기"/></button>
+                            <input type="text" name="addr1" id="inputAddr1" placeholder="주소 검색"/>
+                            <input type="text" name="addr2" id="inputAddr2" placeholder="상세주소 입력"/>
+                        </td>
+                    </tr>
+                </table>
 
-                    <h2 class="tit">개인정보 입력</h2>
-                    <table border="1">                        
-                        <tr>
-                            <td>이름</td>
-                            <td>
-                                <input type="text" name="name" placeholder="이름 입력"/>
-                                <span class="resultName"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>별명</td>
-                            <td>
-                                <p class="nickInfo">공백없는 한글, 영문, 숫자 입력</p>
-                                <input type="text" name="nick" placeholder="별명 입력"/>
-                                <button type="button"><img th:src="@{/img/chk_id.gif}" alt="중복확인"/></button>
-                                <span class="resultNick"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>이메일</td>
-                            <td>
-                                <input type="email" name="email" placeholder="이메일 입력"/>
-                                <button type="button" id="btnSendEmail"><img th:src="@{/img/chk_auth.gif}" alt="인증번호 받기"/></button>
-                                <div class="auth">
-                                    <input type="text" name="auth" placeholder="인증번호 입력"/>
-                                    <button type="button" id="btnAuthEmail"><img th:src="@{/img/chk_confirm.gif}" alt="확인"/></button>
-                                    <span class="resultEmail"></span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>휴대폰</td>
-                            <td><input type="text" name="hp" placeholder="휴대폰 입력"/>
-                                <span class="resultHp"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>주소</td>
-                            <td>
-                                <div>
-                                    <input type="text" name="zip" id="zip" placeholder="우편번호" readonly/>
-                                    <button type="button" class="btnZip" onclick="postcode()"><img th:src="@{/img/chk_post.gif}" alt=""></button>
-                                </div>
-                                <div>
-                                    <input type="text" name="addr1" id="addr1" placeholder="주소를 검색하세요." readonly/>
-                                </div>
-                                <div>
-                                    <input type="text" name="addr2" id="addr2" placeholder="상세주소를 입력하세요."/>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                <div>
+                    <a th:href="@{/user/login}" class="btn btnCancel">취소</a>
+                    <input type="submit" value="회원가입" class="btn btnRegister"/>
+                </div>
 
-                    <div>
-                        <a th:href="@{/user/login}" class="btn btnCancel">취소</a>
-                        <input type="submit" value="회원가입" class="btn btnRegister"/>
-                    </div>
+            </form>
 
-                </form>
-
-            </section>
-        </main>
+        </section>
+    </main>
         <footer>
             <p>
                 <span class="copyright">Copyrightⓒ 김철학(개발에반하다.)</span>
