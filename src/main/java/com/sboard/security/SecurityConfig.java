@@ -3,6 +3,7 @@ package com.sboard.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,36 +34,31 @@ public class SecurityConfig {
     //어플리케이션 실행시 등록됨
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //로그인 설정
-        http.formLogin(login -> login.loginPage("/user/login")
-                .defaultSuccessUrl("/article/list")
+        // 로그인 설정
+        http.formLogin(login -> login
+                .loginPage("/user/login")
+                .defaultSuccessUrl("/")
                 .failureUrl("/user/login?success=100")
                 .usernameParameter("uid")
                 .passwordParameter("pass"));
 
-
-        //로그아웃 설정
-        http.logout(logout -> logout.invalidateHttpSession(true)
+        // 로그아웃 설정
+        http.logout(logout -> logout
+                .invalidateHttpSession(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/user/login?success=200"));
-
-
-        //인가 설정
+                .logoutSuccessUrl("/user/login?success=101"));
+        // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
-                                                    .requestMatchers("/").permitAll()
-                                                    .requestMatchers("/admin/**").hasRole("ADMIN")     //admin은 admin만
-                                                    .requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")   //manager에는 manager,admin둘다 접근가능
-                                                    .requestMatchers("/staff/**").hasAnyRole("STAFF","MANAGER","ADMIN")   //staff//
-                                                    .anyRequest().permitAll()
-        );
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers("/staff/**").hasAnyRole("ADMIN", "MANAGER", "STAFF")
+                .anyRequest().permitAll());
 
+        // 기타 보안 설정
+        http.csrf(AbstractHttpConfigurer::disable);
 
-        //기본 보안설정
-        //csrf = >  인증 유도후 공격하는 해킹기술을 막는것이지만 실습을 위해 disable해놓음
-        http.csrf( configure -> configure.disable());
-
-
-        return  http.getOrBuild();
+        return http.build();
 
     }
 

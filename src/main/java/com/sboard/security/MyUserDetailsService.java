@@ -15,21 +15,22 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    //인증처리 함 // 비밀번호는 적용하지 않는 이유는 비밀번호가 틀려도 상관없이 일단 user의 유뮤를 판단
-    // => 이것을 통과하면 이 entity를 Authenticationprovider로 entity를 보내서 비밀번호 일치유무가 검사됨
+
     @Override
-    public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        Optional<User> optUser = userRepository.findById(uid);
-        if(optUser.isPresent()){
-            //시큐리티 사용자 인증객체 생성 후 리턴
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        // 사용자가 입력한 아이디로 사용자 조회, 비밀번호에 대한 검증은 이전 컴포넌트인 AuthenticationProvider에서 수행
+        Optional<User> optUser = userRepository.findById(username);
+
+        if(optUser.isPresent()) {
+            // 시큐리티 사용자 인증객체 생성 후 반환
             MyUserDetails myUserDetails = MyUserDetails.builder()
                                                 .user(optUser.get())
                                                 .build();
-
             return myUserDetails;
         }
 
-        //사용자가 입력한 아이디가 없는경
+        // 사용자가 입력한 아이디가 없을 경우
         return null;
     }
 }
