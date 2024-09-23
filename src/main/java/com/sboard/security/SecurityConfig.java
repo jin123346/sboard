@@ -49,11 +49,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/user/login?success=101"));
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
-                .requestMatchers("/staff/**").hasAnyRole("ADMIN", "MANAGER", "STAFF")
-                .anyRequest().permitAll());
+                                                    .requestMatchers("/").permitAll()
+                                                    .requestMatchers("/article/**").authenticated()
+                                                    .requestMatchers("/user/**").permitAll()
+                                                    .anyRequest().permitAll());
 
         // 기타 보안 설정
         http.csrf(AbstractHttpConfigurer::disable);

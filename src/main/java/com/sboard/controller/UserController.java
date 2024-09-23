@@ -3,6 +3,7 @@ package com.sboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sboard.config.AppConfig;
+import com.sboard.config.AppInfo;
 import com.sboard.dto.TermsDTO;
 import com.sboard.dto.UserDTO;
 import com.sboard.security.MyUserDetailsService;
@@ -28,16 +29,15 @@ import java.util.Map;
 @Controller
 public class UserController {
 
-    private final AppConfig appConfig;
+    private final AppInfo appInfo;
 
     private final UserService userService;
     private final EmailService emailService;
     private final MyUserDetailsService myUserDetailsService;
 
-    @GetMapping(value = {"/user/login" ,"/"})
-    public String login(Model model){
+    @GetMapping("/user/login")
+    public String login(){
 
-        model.addAttribute("appVersion", appConfig.getAppInfo());
         return "/user/login";
     }
 
@@ -53,6 +53,7 @@ public class UserController {
 
     @GetMapping("/user/register")
     public String register(){
+
         return "/user/register";
     }
 
@@ -73,8 +74,8 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/user/{type}/{value}")
-    public ResponseEntity<?> checkUser( @PathVariable("type")  String type,
-                                        @PathVariable("value") String value, HttpSession session)  {
+    public ResponseEntity<?> checkUser(@PathVariable("type")  String type,
+                                       @PathVariable("value") String value, HttpSession session, Model model)  {
 
         log.info("type : "+type+", value : "+value);
         int count = userService.selectCountUserByType(type,value);
@@ -93,6 +94,7 @@ public class UserController {
         // Json 생성
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("result", count);
+
 
         return ResponseEntity.ok().body(resultMap);
 

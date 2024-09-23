@@ -1,5 +1,7 @@
 package com.sboard.config;
 
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Version;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,11 +14,22 @@ import org.springframework.stereotype.Component;
 @Builder
 public class AppInfo {
 
+    @Value("${ext.appVersion}")
+    private String appVersion;
 
-    @Value("${spring.application.name}")
+    @Value("${ext.projectName}")
     private String appName;
 
-    @Value("${spring.application.version}")
-    private String appVersion;
+
+
+//    @Value("${spring.application.name}")
+//    private String appName;
+//
+//    @Value("${spring.application.version}")
+//    private String appVersion;
+
+
+
+
 
 }

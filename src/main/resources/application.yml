@@ -19,10 +19,11 @@ server:
     port: 8085
     servlet:
         context-path: /sboard
+
 spring:
     application:
         name: sboard
-        version: 0.0.5
+        version: ${ext.appVersion}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Q1w2e3`!
@@ -57,3 +58,13 @@ spring:
     thymeleaf:
         prefix: classpath:/templates
         suffix: .html
+        
+    servlet:
+      multipart:
+          location: uploads/
+          max-file-size: 10MB
+
+
+ext:
+    appVersion: ${ext.appVersion}
+    projectName: ${ext.projectName}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>글목록</title>
@@ -10,15 +10,15 @@
         <header>
             <h3>Board System</h3>
             <p>
-                <span>홍길동</span>님 반갑습니다.
-                <a th:href="@{/user/login}">[로그아웃]</a>
+                <span sec:authentication="principal.user.nick">닉네임</span>님 반갑습니다.
+                <a th:href="@{/user/logout}">[로그아웃]</a>
             </p>
         </header>
         <main id="board">
             <section class="list">
                 <nav>
                     <h1>글목록</h1>
-                    <form action="#">
+                    <form action="/article/search" method="post">
                         <input type="text" name="search" placeholder="제목 키워드, 글쓴이 검색">
                         <input type="submit" value="검색">
                     </form>
@@ -32,12 +32,12 @@
                         <th>날짜</th>
                         <th>조회</th>
                     </tr>                    
-                    <tr>
-                        <td>1</td>
-                        <td><a th:href="@{/article/view}">테스트 제목입니다.[3]</a></td>
-                        <td>길동이</td>
-                        <td>20-05-12</td>
-                        <td>12</td>
+                    <tr th:each="article:${articles}">
+                        <td>[[${article.no}]]</td>
+                        <td><a th:href="@{/article/view}">[[${article.title}]][[ '[' + ${article.comment} + ']' ]]</a></td>
+                        <td>[[${article.writer}]]</td>
+                        <td>[[${article.subStringRdate}]]</td>
+                        <td>[[${article.hit}]]</td>
                     </tr>
                 </table>
 
@@ -53,12 +53,8 @@
                 
             </section>
         </main>
-        <footer>
-            <p>
-                <span class="copyright">Copyrightⓒ 김철학(개발에반하다.)</span>
-                <span class="version">v1.0.1</span>
-            </p>
-        </footer>
+        <footer th:replace="~{/footer.html}" ></footer>
+
     </div>    
 </body>
 </html>

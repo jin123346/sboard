@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>글쓰기</title>
@@ -10,8 +10,8 @@
         <header>
             <h3>Board System</h3>
             <p>
-                <span>홍길동</span>님 반갑습니다.
-                <a th:href="@{/user/login}">[로그아웃]</a>
+                <span sec:authentication="principal.user.nick">닉네임</span>님 반갑습니다.
+                <a th:href="@{/user/logout}">[로그아웃]</a>
             </p>
         </header>
         <main id="board">
@@ -19,7 +19,8 @@
                 <nav>
                     <h1>글쓰기</h1>
                 </nav>
-                <form th:action="@{/article/write}" method="post">
+                <form th:action="@{/article/write}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
                     <table border="0">                        
                         <tr>
                             <th>제목</th>
@@ -28,13 +29,18 @@
                         <tr>
                             <th>내용</th>
                             <td>
-                                <textarea name="content"></textarea>
+                                <textarea name="contents"></textarea>
                             </td>
                         </tr>
                         <tr>
                             <th>파일</th>
                             <td>
-                                <input type="file" name="file"/>
+                                <p style="margin-bottom: 6px;">
+                                    최대 2개 파일 첨부 가능 각 파일당 최대 10MB까지 가능
+                                </p>
+
+                                <input type="file" name="files"/>
+                                <input type="file" name="files"/>
                             </td>
                         </tr>
                     </table>
@@ -47,12 +53,8 @@
 
             </section>
         </main>
-        <footer>
-            <p>
-                <span class="copyright">Copyrightⓒ 김철학(개발에반하다.)</span>
-                <span class="version">v1.0.1</span>
-            </p>
-        </footer>
+        <footer th:replace="~{/footer.html}" ></footer>
+
     </div>    
 </body>
 </html>

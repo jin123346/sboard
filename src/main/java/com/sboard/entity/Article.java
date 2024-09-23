@@ -1,9 +1,7 @@
 package com.sboard.entity;
 
 import com.sboard.dto.ArticleDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name="article")
 public class Article {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
     private String cate;
     private String title;
@@ -30,6 +29,8 @@ public class Article {
 
     @CreationTimestamp
     private LocalDateTime rdate;
+
+
 
     public ArticleDTO toDTO() {
         return ArticleDTO.builder()
