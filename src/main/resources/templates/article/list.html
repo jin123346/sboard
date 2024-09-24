@@ -18,9 +18,16 @@
         <main id="board">
             <section class="list">
                 <nav>
-                    <h1>글목록</h1>
-                    <form action="/article/search" method="post">
-                        <input type="text" name="search" placeholder="제목 키워드, 글쓴이 검색">
+                    <h1 ><a th:href="@{/article/list}">글목록</a></h1>
+                    <form th:action="@{/article/list}" class="search">
+                        <select name="type" >
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                            <option value="title_content">제목+내용</option>
+                            <option value="writer">작성자</option>
+                        </select>
+
+                        <input type="text" name="keyword" placeholder="제목 키워드, 글쓴이 검색">
                         <input type="submit" value="검색">
                     </form>
                 </nav>
@@ -43,12 +50,26 @@
                 </table>
 
                 <div class="page">
-                    <a th:href="@{/article/list(pg=${pageResponseDTO.start -1 })}" class="prev" th:if="${pageResponseDTO.prev}">이전</a>
-                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}">
-                        <a th:href="@{/article/list(pg=${num})}" class="num current">[[${num}]]</a>
+                    <th:block th:if="${pageResponseDTO.prev}">
+                    <a th:if="${pageResponseDTO.keyword == null }" th:href="@{/article/list(pg=${pageResponseDTO.start -1 })}" class="prev" >이전</a>
+                    <a th:if="${pageResponseDTO.keyword != null  }" th:href="@{/article/list(pg=${pageResponseDTO.start -1 },type=${pageResponseDTO.type},keyworkd=${pageResponseDTO.keyword})}" class="prev" >이전</a>
+                    </th:block>
+                    <th:block th:if="${pageResponseDTO.start <= pageResponseDTO.end}">
+                        <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}">
+                            <a  th:if="${pageResponseDTO.keyword == null}" th:href="@{/article/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'current' : 'num'">[[${num}]]</a>
+                            <a th:if="${pageResponseDTO.keyword != null}" th:href="@{/article/list(pg=${num },type=${pageResponseDTO.type},keyworkd=${pageResponseDTO.keyword})}" class="num current">[[${num}]]</a>
+                        </th:block>
+                    </th:block>
+                    <th:block th:unless="${pageResponseDTO.start <= pageResponseDTO.end}" >
+                        <a id="none" th:href="@{/article/list(pg=1)}">일치하는 내용이 없습니다.</a>
                     </th:block>
 
-                    <a th:href="@{/article/list(pg=${pageResponseDTO.end +1 })}" class="next" th:if="${pageResponseDTO.next}">다음</a>
+
+
+                    <th:block th:if="${pageResponseDTO.next}">
+                    <a   th:if="${pageResponseDTO.keyword == null}" th:href="@{/article/list(pg=${pageResponseDTO.end +1 })}" class="next" >다음</a>
+                    <a  th:if="${pageResponseDTO.keyword != null}" th:href="@{/article/list(pg=${pageResponseDTO.start -1 },type=${pageResponseDTO.type},keyworkd=${pageResponseDTO.keyword})}" class="next" >다음</a>
+                    </th:block>
                 </div>
 
                 <a th:href="@{/article/write}" class="btn btnWrite">글쓰기</a>

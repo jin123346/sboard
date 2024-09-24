@@ -31,8 +31,11 @@ public class ArticleController {
 
     @GetMapping(value={"/article/list","/"})
     public String list(Model model,PageRequestDTO pageRequestDTO) {
+        log.info(pageRequestDTO);
+        PageResponseDTO pageResponseDTO = articleService.getAllArticles(pageRequestDTO);
 
-        PageResponseDTO pageResponseDTO= articleService.getAllArticles(pageRequestDTO);
+        log.info("start : "+pageResponseDTO.getStart());
+        log.info("end : " +pageResponseDTO.getEnd());
 
         log.info(pageResponseDTO.getDtoList());
         model.addAttribute("pageResponseDTO", pageResponseDTO);

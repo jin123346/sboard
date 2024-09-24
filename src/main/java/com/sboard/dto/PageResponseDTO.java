@@ -20,6 +20,11 @@ public class PageResponseDTO {
     private int start, end;
     private boolean prev,next;
 
+
+    private String type;
+    private String keyword;
+
+
     @Builder
      public PageResponseDTO(PageRequestDTO pageRequestDTO,List<ArticleDTO> dtoList, int total){
          this.cate = pageRequestDTO.getCate();
@@ -34,6 +39,12 @@ public class PageResponseDTO {
          this.end = end > last? last:end;
          this.prev = this.start>1;
          this.next = total > this.end *this.size;
+         this.type = pageRequestDTO.getType();
+         this.keyword = pageRequestDTO.getKeyword();
+        // Ensure `end` is at least 1 if `start` is 1
+        if (this.start == 1 && this.end == 0) {
+            this.end = 0;
+        }
 
 
      }

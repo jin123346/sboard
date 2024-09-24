@@ -14,10 +14,11 @@ import org.springframework.stereotype.Component;
 @Builder
 public class AppInfo {
 
-    @Value("${ext.appVersion}")
+    @Value("${spring.application.version}")
     private String appVersion;
 
-    @Value("${ext.projectName}")
+
+    @Value("${spring.application.name}")
     private String appName;
 
 

@@ -265,8 +265,12 @@ footer > p > .version {
 #board > .list > nav > form {
     float: right;
 }
+#board > .list > nav > form > select{
+    height: 26px;
+    outline: none;
+}
 
-#board > .list > nav > form > input[name=search]{
+#board > .list > nav > form > input[name=keyword]{
     width: 200px;
     height: 26px;
     text-indent: 6px;
@@ -327,7 +331,14 @@ footer > p > .version {
     background: #888;
     color: #fff;
 }
-
+#board > .list > .page > #none{
+    display: block;
+    border: none;
+    height: 26px;
+    width: 100%;
+    background: #ffffff;
+    padding-bottom: 40px;
+}
 /* 글쓰기 */
 #board > .write {
     width: 100%;

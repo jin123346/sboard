@@ -87,21 +87,26 @@ public class ArticleService {
     public PageResponseDTO getAllArticles(PageRequestDTO pageRequestDTO) {
 
         Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Tuple> pageArticle =null;
+        if(pageRequestDTO.getKeyword()==null) {
+            pageArticle = articleRepository.selectARticleAllForList(pageRequestDTO, pageable);
+        }else{
+            pageArticle = articleRepository.selectArticleForSearch(pageRequestDTO, pageable);
 
+        }
 
-       Page<Tuple> pageArticle =  articleRepository.selectARticleAllForList(pageRequestDTO, pageable);
-
-//        List<Article> articles = articleRepository.findAll();
         List<ArticleDTO> articleList = pageArticle.stream().map(tuple ->{
-                   Article article = tuple.get(0,Article.class);
-                   String nick=tuple.get(1,String.class);
-                   article.setNick(nick);
-                   return modelMapper.map(article, ArticleDTO.class);
-            }
-                                                         ).toList();
+                    Article article = tuple.get(0,Article.class);
+                    String nick=tuple.get(1,String.class);
+                    article.setNick(nick);
+                    return modelMapper.map(article, ArticleDTO.class);
+                }
+        ).toList();
+
 
         int total = (int)pageArticle.getTotalElements();
 
+        log.info("total : "+total);
         return PageResponseDTO.builder()
                 .dtoList(articleList)
                 .total(total)
@@ -109,8 +114,10 @@ public class ArticleService {
                 .build();
 
 
-
     }
+
+
+
 
     public int deleteArticleById(int id) {
         boolean isExists =  articleRepository.existsById(id);

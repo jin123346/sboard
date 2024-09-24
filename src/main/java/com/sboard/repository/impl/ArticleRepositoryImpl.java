@@ -3,6 +3,7 @@ package com.sboard.repository.impl;
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sboard.dto.PageRequestDTO;
 import com.sboard.entity.QArticle;
@@ -31,24 +32,78 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     @Override
     public Page<Tuple> selectARticleAllForList(PageRequestDTO pagerequestDTO, Pageable pageable) {
 
-        QueryResults<Tuple> results=  queryFactory
-                                            .select(qarticle,quser.nick)
-                                            .from(qarticle)
-                                            .join(quser)
-                                            .on(qarticle.writer.eq(quser.uid))
-                                            .offset(pageable.getOffset())
-                                            .limit(pageable.getPageSize())
-                                            .orderBy(qarticle.no.desc())
-                                            .fetchResults();
 
-        log.info("result : "+results);
+        List<Tuple> content = queryFactory
+                .select(qarticle, quser.nick)
+                .from(qarticle)
+                .join(quser)
+                .on(qarticle.writer.eq(quser.uid))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qarticle.no.desc())
+                .fetch();
 
-        List<Tuple> content = results.getResults();
-        log.info("content : "+content);
+        long total = queryFactory
+                        .select(qarticle.count())
+                        .from(qarticle)
+                        .fetchOne();
 
-        long total = results.getTotal();
+        log.info("total : "+total);
+
+
+
+
 
         return new PageImpl<Tuple>(content,pageable,total);
 
     }
+
+    @Override
+    public Page<Tuple> selectArticleForSearch(PageRequestDTO pagerequestDTO, Pageable pageable) {
+
+        String type= pagerequestDTO.getType();
+        String keyword= pagerequestDTO.getKeyword();
+        //검색조건에 따라 where조건 표현식 생성
+        BooleanExpression expression = null;
+
+        if(type.equals("title")){
+            expression = qarticle.title.like("%"+keyword+"%");
+            log.info("expression : "+expression);
+        }else if(type.equals("content")){
+            expression = qarticle.contents.like("%"+keyword+"%");
+            log.info("expression : "+expression);
+
+        }else if(type.equals("title_content")){
+            expression = qarticle.title.like("%"+keyword+"%").or(qarticle.contents.like("%"+keyword+"%"));
+            log.info("expression : "+expression);
+
+        }else if(type.equals("writer")){
+            expression = quser.nick.like("%"+keyword+"%");
+            log.info("expression : "+expression);
+
+        }
+
+        List<Tuple> content = queryFactory
+                            .select(qarticle, quser.nick)
+                            .from(qarticle)
+                            .join(quser)
+                            .on(qarticle.writer.eq(quser.uid))
+                            .where(expression)
+                            .offset(pageable.getOffset())
+                            .limit(pageable.getPageSize())
+                            .orderBy(qarticle.no.desc())
+                            .fetch();
+
+        long total = queryFactory
+                .select(qarticle.count())
+                .from(qarticle)
+                .join(quser)
+                .on(qarticle.writer.eq(quser.uid))
+                .where(expression)
+                .fetchOne();
+
+
+
+        log.info("total : "+total);
+        return new PageImpl<Tuple>(content,pageable,total);    }
 }

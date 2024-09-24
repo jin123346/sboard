@@ -5,12 +5,13 @@ plugins {
 }
 
 ext {
-    appVersion = '0.0.3-SNAPSHOT'
-    projectName = "Sboard"
+    version = '0.0.4-SNAPSHOT'
+    name = "Sboard"
+    group="com.sboard"
 }
 
 
-//group = 'com.sboard'
+//
 //version = '0.0.5-SNAPSHOT'
 
 java {

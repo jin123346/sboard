@@ -22,8 +22,8 @@ server:
 
 spring:
     application:
-        name: sboard
-        version: ${ext.appVersion}
+        name: Sboard
+        version : ${ext.version}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Q1w2e3`!
@@ -64,7 +64,3 @@ spring:
           location: uploads/
           max-file-size: 10MB
 
-
-ext:
-    appVersion: ${ext.appVersion}
-    projectName: ${ext.projectName}
