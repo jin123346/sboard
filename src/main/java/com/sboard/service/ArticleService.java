@@ -1,17 +1,24 @@
 package com.sboard.service;
 
+import com.querydsl.core.Tuple;
 import com.sboard.dto.ArticleDTO;
+import com.sboard.dto.PageRequestDTO;
+import com.sboard.dto.PageResponseDTO;
 import com.sboard.entity.Article;
 import com.sboard.repository.ArticleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -55,14 +62,54 @@ public class ArticleService {
 
     }
 
+    public ArticleDTO updateArticleHit(int no){
+        Optional<Article> opt = articleRepository.findById(no);
+        if(opt.isPresent()) {
+            Article article = opt.get();
+            //LocalDateTime originalRdate = article.getRdate();
+            //article.setRdate(originalRdate);
+            article.setHit(article.getHit() + 1);
+
+
+            return  modelMapper.map(articleRepository.save(article), ArticleDTO.class);
+
+        }
+        return null;
+    }
+
     public ArticleDTO getArticleById(int id) {
         Article article = articleRepository.findById(id).orElse(null);
-        return article != null ? article.toDTO() : null;
+        if(article != null) {
+            return modelMapper.map(article, ArticleDTO.class);
+        }
+        return null;
     }
-    public List<ArticleDTO> getAllArticles() {
-        List<Article> articles = articleRepository.findAll();
-        List<ArticleDTO> articleDTOs = articles.stream().map(Article::toDTO).toList();
-        return articleDTOs;
+    public PageResponseDTO getAllArticles(PageRequestDTO pageRequestDTO) {
+
+        Pageable pageable = pageRequestDTO.getPageable("no");
+
+
+       Page<Tuple> pageArticle =  articleRepository.selectARticleAllForList(pageRequestDTO, pageable);
+
+//        List<Article> articles = articleRepository.findAll();
+        List<ArticleDTO> articleList = pageArticle.stream().map(tuple ->{
+                   Article article = tuple.get(0,Article.class);
+                   String nick=tuple.get(1,String.class);
+                   article.setNick(nick);
+                   return modelMapper.map(article, ArticleDTO.class);
+            }
+                                                         ).toList();
+
+        int total = (int)pageArticle.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .dtoList(articleList)
+                .total(total)
+                .pageRequestDTO(pageRequestDTO)
+                .build();
+
+
+
     }
 
     public int deleteArticleById(int id) {

@@ -43,9 +43,17 @@ public class ArticleDTO {
     private String subStringRdate;
 
     public String getSubStringRdate() {
+        if(rdate ==null){
+            return rdate;
+        }else{
         rdate =  rdate.substring(0,10);
         return rdate;
+        }
     }
+
+    //추가필드
+    private String nick;
+
 
     /*
      Entity 변환 메서드 대신 ModelMapper 사용

@@ -9,7 +9,8 @@
     <div id="wrapper">
         <header>
             <h3>Board System</h3>
-            <p>
+            <p th:if="${#authentication == null}"> <a th:href="@{/user/login}">[로그인]</a></p>
+            <p th:if="${#authentication != null}">
                 <span sec:authentication="principal.user.nick">닉네임</span>님 반갑습니다.
                 <a th:href="@{/user/logout}">[로그아웃]</a>
             </p>
@@ -32,21 +33,22 @@
                         <th>날짜</th>
                         <th>조회</th>
                     </tr>                    
-                    <tr th:each="article:${articles}">
-                        <td>[[${article.no}]]</td>
-                        <td><a th:href="@{/article/view}">[[${article.title}]][[ '[' + ${article.comment} + ']' ]]</a></td>
-                        <td>[[${article.writer}]]</td>
-                        <td>[[${article.subStringRdate}]]</td>
+                    <tr th:each="article,i:${pageResponseDTO.getDtoList()}">
+                        <td>[[${pageResponseDTO.startNo -i.index}]]</td>
+                        <td><a th:href="@{/article/view(no=${article.no})}">[[${article.title}]][[ '[' + ${article.comment} + ']' ]]</a></td>
+                        <td>[[${article.nick}]]</td>
+                        <td>[[${article.rdate}]]</td>
                         <td>[[${article.hit}]]</td>
                     </tr>
                 </table>
 
                 <div class="page">
-                    <a href="#" class="prev">이전</a>
-                    <a href="#" class="num current">1</a>
-                    <a href="#" class="num">2</a>
-                    <a href="#" class="num">3</a>
-                    <a href="#" class="next">다음</a>
+                    <a th:href="@{/article/list(pg=${pageResponseDTO.start -1 })}" class="prev" th:if="${pageResponseDTO.prev}">이전</a>
+                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start,pageResponseDTO.end)}">
+                        <a th:href="@{/article/list(pg=${num})}" class="num current">[[${num}]]</a>
+                    </th:block>
+
+                    <a th:href="@{/article/list(pg=${pageResponseDTO.end +1 })}" class="next" th:if="${pageResponseDTO.next}">다음</a>
                 </div>
 
                 <a th:href="@{/article/write}" class="btn btnWrite">글쓰기</a>

@@ -3,6 +3,8 @@ package com.sboard.controller;
 import com.sboard.config.AppInfo;
 import com.sboard.dto.ArticleDTO;
 import com.sboard.dto.FileDTO;
+import com.sboard.dto.PageRequestDTO;
+import com.sboard.dto.PageResponseDTO;
 import com.sboard.entity.Article;
 import com.sboard.service.ArticleService;
 import com.sboard.service.FileService;
@@ -28,10 +30,12 @@ public class ArticleController {
 
 
     @GetMapping(value={"/article/list","/"})
-    public String list(Model model){
-        List<ArticleDTO> articles= articleService.getAllArticles();
+    public String list(Model model,PageRequestDTO pageRequestDTO) {
 
-        model.addAttribute("articles", articles);
+        PageResponseDTO pageResponseDTO= articleService.getAllArticles(pageRequestDTO);
+
+        log.info(pageResponseDTO.getDtoList());
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
 
 
         return "/article/list";
@@ -43,9 +47,9 @@ public class ArticleController {
         return "/article/modify";
     }
     @GetMapping("/article/view")
-    public String view(){
-
-
+    public String view(@RequestParam("no") int no, Model model){
+       ArticleDTO updateArticle =  articleService.updateArticleHit(no);
+        model.addAttribute("article", updateArticle);
         return "/article/view";
     }
     @GetMapping("/article/write")

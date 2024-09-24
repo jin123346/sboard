@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @ToString
 @Builder
 @AllArgsConstructor
@@ -30,20 +31,28 @@ public class Article {
     @CreationTimestamp
     private LocalDateTime rdate;
 
+    //추가필드
+    @Transient
+    private String nick;
+
+    @Transient
+    private String subStringRdate;
 
 
-    public ArticleDTO toDTO() {
-        return ArticleDTO.builder()
-                .no(this.no)
-                .cate(this.cate)
-                .title(this.title)
-                .contents(this.contents)
-                .comment(this.comment)
-                .file(this.file)
-                .hit(this.hit)
-                .writer(this.writer)
-                .regip(this.regip)
-                .rdate(rdate.toString())
-                .build();
-    }
+
+//
+//    public ArticleDTO toDTO() {
+//        return ArticleDTO.builder()
+//                .no(this.no)
+//                .cate(this.cate)
+//                .title(this.title)
+//                .contents(this.contents)
+//                .comment(this.comment)
+//                .file(this.file)
+//                .hit(this.hit)
+//                .writer(this.writer)
+//                .regip(this.regip)
+//                .rdate(rdate.toString())
+//                .build();
+//    }
 }
