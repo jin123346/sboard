@@ -129,6 +129,16 @@ footer > p > .version {
     float: right;
 }
 
+#user  #sns > a{
+    display: block;
+    width: 100%;
+
+}
+#user  #sns > a > img{
+    margin: 0 auto;
+
+}
+
 /* 약관 */
 #user > .terms {
     width: 600px;

@@ -18,8 +18,11 @@ public class AppInfo {
     private String appVersion;
 
 
-    @Value("${spring.application.name}")
+    @Value("${app.name}")
     private String appName;
+
+    @Value("${spring.application.name}")
+    private String projectName;
 
 
 

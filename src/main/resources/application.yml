@@ -1,8 +1,10 @@
 app:
+    name: 하진희(CodeJin)
     version: 0.0.1
 logging:
     file:
         name: /logs/sbord.log
+
     level:
         jdbc:
             resultsettable: debug
@@ -15,15 +17,15 @@ logging:
                         bind: trace
                 sql: debug
         root: info
+        org.springframework.web: DEBUG
 server:
     port: 8085
     servlet:
-        context-path: /sboard
-
+        context-path: /
 spring:
     application:
         name: Sboard
-        version : ${ext.version}
+        version : ${version}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Q1w2e3`!
@@ -58,9 +60,38 @@ spring:
     thymeleaf:
         prefix: classpath:/templates
         suffix: .html
-        
     servlet:
-      multipart:
-          location: uploads/
-          max-file-size: 10MB
+        multipart:
+            location: uploads/
+            max-file-size: 10MB
+    security:
+        oauth2:
+            client:
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+                        token-uri: https://accounts.google.com/o/oauth2/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+                        user-name-attribute: name
+                    kakao:
+                        authorization-uri: https://kauth.kakao.com/oauth/authorize
+                        token-uri: https://kauth.kakao.com/oauth/token
+                        user-info-uri: https://kapi.kakao.com/v2/user/me
+                        user-name-attribute: id
+                registration:
+                    google:
+                        client-id: 559399101303-bbip53quapt8ejncjf9jk6jl871q95p7.apps.googleusercontent.com
+                        client-secret: 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
+                        redirect-uri: http://localhost:8085/login/oauth2/code/google
+                        scope:
+                            - email
+                            - profile
+                    kakao:
+                        client-id: 1fb75ab225c4c95ce1ea2426169a9c31
+                        client-secret: LgMJYlccYakpMYyjcWuAthVSOF5Yc1PG
+                        redirect-uri: http://127.0.0.1:8085/login/oauth2/code/kakao
+                        authorization-grant-type: authorization_code
+                        client-authentication-method: client_secret_post
+                        scope: profile_nickname,account_email
+                        client-name: kakao
 

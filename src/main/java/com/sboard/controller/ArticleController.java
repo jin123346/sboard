@@ -1,19 +1,19 @@
 package com.sboard.controller;
 
 import com.sboard.config.AppInfo;
-import com.sboard.dto.ArticleDTO;
-import com.sboard.dto.FileDTO;
-import com.sboard.dto.PageRequestDTO;
-import com.sboard.dto.PageResponseDTO;
+import com.sboard.dto.*;
 import com.sboard.entity.Article;
 import com.sboard.service.ArticleService;
+import com.sboard.service.CommentService;
 import com.sboard.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,6 +26,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final FileService fileService;
+    private final CommentService commentService;
 
 
 
@@ -50,15 +51,44 @@ public class ArticleController {
         return "/article/modify";
     }
     @GetMapping("/article/view")
-    public String view(@RequestParam("no") int no, Model model){
-       ArticleDTO updateArticle =  articleService.updateArticleHit(no);
+    public String view(@RequestParam("no") int no,@RequestParam("pg") int pg, Model model){
+        log.info(no);
+        ArticleDTO updateArticle =  articleService.selectArticleByNo(no);
+
+
+        log.info("updateArticle : " +updateArticle);
+
+        model.addAttribute("pg",pg);
         model.addAttribute("article", updateArticle);
         return "/article/view";
     }
+
+//    @PostMapping("/article/comment/{no}")
+//    public String comment(@PathVariable("no") int no, @RequestParam String content, @RequestParam String writer, HttpServletRequest request){
+//        log.info(content);
+//        log.info(writer);
+//
+//        CommentDTO commentDTO = CommentDTO.builder()
+//                .content(content)
+//                .writer(writer)
+//                .parent(no)
+//                .build();
+//
+//        commentDTO.setRegip(request.getRemoteAddr());
+//        CommentDTO savedComment = commentService.insertComment(commentDTO);
+//        request.setAttribute("nowComment", savedComment);
+//
+//        return "redirect:/article/view?no="+no;
+//
+//    }
+
     @GetMapping("/article/write")
     public String write(){
         return "/article/write";
     }
+
+
+
 
     @PostMapping("/article/write")
     public String write(ArticleDTO articleDTO, @RequestParam("writer") String writer, HttpServletRequest request){
@@ -92,6 +122,19 @@ public class ArticleController {
         return "redirect:/article/write?success=200";
 
     }
+
+    @GetMapping("/article/delete")
+    public String delete(@RequestParam int no){
+        log.info(no);
+        articleService.deleteArticleById(no);
+        return "redirect:/article/list";
+
+    }
+
+
+
+
+
 
 
 

@@ -25,7 +25,6 @@ public class ArticleDTO {
 
     @Builder.Default
     private int comment = 0;
-
 //    private MultipartFile file1;
     private List<MultipartFile> files;
 
@@ -53,7 +52,9 @@ public class ArticleDTO {
 
     //추가필드
     private String nick;
-
+    private List<FileDTO> fileList;
+    private List<CommentDTO> commentList;
+    private int pg;
 
     /*
      Entity 변환 메서드 대신 ModelMapper 사용

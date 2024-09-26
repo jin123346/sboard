@@ -24,6 +24,15 @@
                         </tr>
                     </table>
                     <input type="submit" value="로그인" class="btnLogin"/>
+                    <section id="sns">
+                        <a th:href="@{/oauth2/authorization/google}">
+                            <img th:src="@{/img/web_light_sq_SI@1x.png}" alt="google">
+                        </a>
+                        <a th:href="@{/oauth2/authorization/kakao}">
+                            <img th:src="@{/img/kakao_login_medium_wide.png}" alt="kakao">
+                        </a>
+                    </section>
+
                     
                 </form>
                 <div>
@@ -38,6 +47,7 @@
                     </div>                    
                 </div>
             </section>
+
         </main>
         <footer th:replace="~{/footer.html}" ></footer>
     </div>    

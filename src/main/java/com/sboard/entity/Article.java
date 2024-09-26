@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -36,7 +37,16 @@ public class Article {
     private String nick;
 
     @Transient
+    private int pg;
+
+    @Transient
     private String subStringRdate;
+
+    @OneToMany(mappedBy = "ano", cascade = CascadeType.REMOVE)
+    private List<FileEntity> fileList;
+
+    @OneToMany(mappedBy = "parent",cascade =CascadeType.REMOVE )
+    private List<Comment> commentList;
 
 
 

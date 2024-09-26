@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -23,9 +24,13 @@ public class QArticle extends EntityPathBase<Article> {
 
     public final NumberPath<Integer> comment = createNumber("comment", Integer.class);
 
+    public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
+
     public final StringPath contents = createString("contents");
 
     public final NumberPath<Integer> file = createNumber("file", Integer.class);
+
+    public final ListPath<FileEntity, QFileEntity> fileList = this.<FileEntity, QFileEntity>createList("fileList", FileEntity.class, QFileEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
 

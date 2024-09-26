@@ -17,7 +17,11 @@ public class Terms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name="terms", columnDefinition = "TEXT")
     private String terms;
+
+    @Column(name="privacy", columnDefinition = "TEXT")
     private String privacy;
 
 

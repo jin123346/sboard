@@ -42,7 +42,7 @@
                     </tr>                    
                     <tr th:each="article,i:${pageResponseDTO.getDtoList()}">
                         <td>[[${pageResponseDTO.startNo -i.index}]]</td>
-                        <td><a th:href="@{/article/view(no=${article.no})}">[[${article.title}]][[ '[' + ${article.comment} + ']' ]]</a></td>
+                        <td><a th:href="@{/article/view(no=${article.no},pg=${pageResponseDTO.pg})}">[[${article.title}]][[ '[' + ${article.comment} + ']' ]]</a></td>
                         <td>[[${article.nick}]]</td>
                         <td>[[${article.rdate}]]</td>
                         <td>[[${article.hit}]]</td>

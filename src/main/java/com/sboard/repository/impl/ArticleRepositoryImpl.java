@@ -5,8 +5,11 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sboard.dto.ArticleResponseDTO;
 import com.sboard.dto.PageRequestDTO;
 import com.sboard.entity.QArticle;
+import com.sboard.entity.QComment;
+import com.sboard.entity.QFileEntity;
 import com.sboard.entity.QUser;
 import com.sboard.repository.custom.ArticleRepositoryCustom;
 import lombok.AllArgsConstructor;
@@ -28,6 +31,9 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QArticle qarticle = QArticle.article;
     private final QUser quser  = QUser.user;
+    private final QFileEntity qfileentity = QFileEntity.fileEntity;
+    private final QComment qcomment = QComment.comment;
+
 
     @Override
     public Page<Tuple> selectARticleAllForList(PageRequestDTO pagerequestDTO, Pageable pageable) {
@@ -105,5 +111,29 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
 
         log.info("total : "+total);
-        return new PageImpl<Tuple>(content,pageable,total);    }
+        return new PageImpl<Tuple>(content,pageable,total);
+    }
+
+    @Override
+    public List<Tuple> selectArticleById(int no) {
+        List<Tuple>  content = queryFactory
+                                .select(qarticle,qfileentity,qcomment)
+                                .from(qarticle)
+                                .join(qfileentity)
+                                .on(qfileentity.ano.eq(qarticle.no))
+                                .join(qcomment)
+                                .on(qcomment.parent.eq(qarticle.no))
+                                .fetch();
+
+        log.info("content : "+content);
+
+        return content;
+    }
+
+
+
+
+
 }
+
+
