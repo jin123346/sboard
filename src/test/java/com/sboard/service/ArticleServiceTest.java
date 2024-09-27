@@ -37,20 +37,6 @@ class ArticleServiceTest {
 
     @Test
     void getAllArticles() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .no(25)
-                .pg(1)
-                .size(10)
-                .build();
-        Pageable pageable = pageRequestDTO.getPageable("no");
-
-
-
-        Page<Tuple> pageArticle =  articleRepository.selectARticleAllForList(pageRequestDTO, pageable);
-        System.out.println(pageArticle.getContent());
-
-
-
 
     }
 
